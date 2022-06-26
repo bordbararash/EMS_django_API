@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
@@ -74,6 +75,30 @@ class ActivationCode(GeneralModel):
 
     def __str__(self):
         return f'{self.code} As {self.TYPE_CHOICES} code send in date{self.create_at}'
+
+class City(GeneralModel):
+    City_name=models.CharField(verbose_name='نام شهر',max_length=30)
+    def __str__(self):
+        return f'{self.City_name}'
+    class Meta:
+        
+        verbose_name = _('CityName')
+        verbose_name_plural = _('CityNames')
+class Unit(GeneralModel):
+    Unit_name=models.CharField(verbose_name='نام واحد',max_length=30)
+    City=models.ForeignKey(City,on_delete=models.CASCADE)
+    def __str__(self):
+        return f'{self.Unit_name} - {self.City.City_name}'
+    class Meta:
+        
+        verbose_name = _('UnitName')
+        verbose_name_plural = _('UnitNames')
+
+class AdminUser(GeneralModel):
+    Admin_User=models.ForeignKey(MyUser,on_delete=models.CASCADE)
+    # Admin_City=models.ForeignKey(City,on_delete=models.CASCADE)
+    Admin_Unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
+
 
 
 # @deconstructible
