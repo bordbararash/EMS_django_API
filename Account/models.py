@@ -36,11 +36,11 @@ class MyUser(AbstractUser):
     USERNAME_FIELD = 'User_mobile'
 
     User_national_code = models.CharField(
-        max_length=10, verbose_name='کد ملی ',unique=True,blank=True)
+        max_length=10, verbose_name='کد ملی ',blank=True,default=None)
     User_mobile = models.CharField(
         max_length=11, verbose_name='شماره موبایل', unique=True)
     password = models.CharField(verbose_name='پسورد ', max_length=128)
-    IsOrganizationalAccount=models.BooleanField(verbose_name="حساب سازمانی میباشد")
+    IsOrganizationalAccount=models.BooleanField(verbose_name="حساب سازمانی میباشد",default=False)
     City=models.ForeignKey(City,on_delete=models.CASCADE)
     Unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
     class Meta:

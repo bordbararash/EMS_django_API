@@ -7,6 +7,7 @@ class MyUserManager(BaseUserManager):
             raise ValueError('User_mobile is required!!')
         # in settings you should set :AUTH_USER_MODEL
         user = self.model(User_mobile=User_mobile, **other_fields)
+
         user.set_password(password)
         user.save()
         return user
@@ -20,4 +21,4 @@ class MyUserManager(BaseUserManager):
             raise ValueError('superuser must is_staff=True!!! ')
         if other_fields.get('is_superuser') is not True:
             raise ValueError('superuser must be is_superuser=True!!! ')
-        return self.create_user(User_mobile,password, **other_fields)
+        return self.create_user(User_mobile, password, **other_fields)

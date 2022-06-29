@@ -21,6 +21,7 @@ OTPCODE = ''
 
 class UserRegisterView(APIView):
     def post(self, request):
+        
         ser_data = UserRegisterSerializer(data=request.POST)
         if ser_data.is_valid():
             # TODO send Activation Code:1234
