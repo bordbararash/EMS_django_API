@@ -8,22 +8,41 @@ from django.contrib.auth.models import User, AbstractUser
 
 # Create your models here.
 
+class City(GeneralModel):
+    City_name=models.CharField(verbose_name='نام شهر',max_length=30)
+    def __str__(self):
+        return f'{self.City_name}'
+    class Meta:
+        
+        verbose_name = _('CityName')
+        verbose_name_plural = _('CityNames')
+class Unit(GeneralModel):
+    Unit_name=models.CharField(verbose_name='نام واحد',max_length=30)
+    City=models.ForeignKey(City,on_delete=models.CASCADE)
+    def __str__(self):
+        return f'{self.Unit_name} - {self.City.City_name}'
+    class Meta:
+        
+        verbose_name = _('UnitName')
+        verbose_name_plural = _('UnitNames')
 
 class MyUser(AbstractUser):
 
     objects= MyUserManager()
     backend = 'Account.MyBackend.MobileBackend'
 
+    username = None
+    REQUIRED_FIELDS = ['User_national_code']
+    USERNAME_FIELD = 'User_mobile'
 
     User_national_code = models.CharField(
-        max_length=10, verbose_name='کد ملی ', unique=True)
+        max_length=10, verbose_name='کد ملی ',unique=True,blank=True)
     User_mobile = models.CharField(
         max_length=11, verbose_name='شماره موبایل', unique=True)
     password = models.CharField(verbose_name='پسورد ', max_length=128)
-
-    REQUIRED_FIELDS = ['User_national_code']
-    username = None
-    USERNAME_FIELD = 'User_mobile'
+    IsOrganizationalAccount=models.BooleanField(verbose_name="حساب سازمانی میباشد")
+    City=models.ForeignKey(City,on_delete=models.CASCADE)
+    Unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
     class Meta:
         verbose_name_plural = 'کاربران '
         verbose_name = 'کاربر '
@@ -75,6 +94,30 @@ class ActivationCode(GeneralModel):
 
     def __str__(self):
         return f'{self.code} As {self.TYPE_CHOICES} code send in date{self.create_at}'
+
+
+
+
+class Profile(models.Model):
+    GENDER_MALE = 1
+    GENDER_FEMALE = 2
+    GENDER_CHOICES = [
+        (GENDER_MALE, ("مرد")),
+        (GENDER_FEMALE, ("زن")),
+    ]
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    gender = models.PositiveSmallIntegerField(
+        choices=GENDER_CHOICES, null=True, blank=True, verbose_name='جنسیت')
+    age = models.PositiveSmallIntegerField(default=0)
+    bio = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
+class AdminUser(GeneralModel):
+    Admin_User=models.ForeignKey(MyUser,on_delete=models.CASCADE)
+    # Admin_City=models.ForeignKey(City,on_delete=models.CASCADE)
+    Admin_Unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
+
 
 
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
-from Person.models import AdminUser, City, Unit
+from .models import AdminUser, City, Unit
 # Register your models here.
 User = get_user_model()
 admin.site.register(User)

@@ -1,53 +1,16 @@
 # from django.utils.html import format_html
-from django.db import models
-from Utils.general_model import GeneralModel
+# from django.db import models
+# from Account.models import MyUser
+# from Utils.general_model import GeneralModel
 # from django.contrib.auth.models import User, AbstractUser
-from Account.models import MyUser
+# from Account.models import MyUser
 # from .MyUserManager import MyUserManager
 # from django.core import validators
 # from django.utils.deconstruct import deconstructible
-from django.utils.translation import gettext_lazy as _
-# # Create your models here.
+# from django.utils.translation import gettext_lazy as _
+# from django.contrib.auth import get_user_model
+# # # Create your models here.
 
-
-
-class City(GeneralModel):
-    City_name=models.CharField(verbose_name='نام شهر',max_length=30)
-    def __str__(self):
-        return f'{self.City_name}'
-    class Meta:
-        
-        verbose_name = _('CityName')
-        verbose_name_plural = _('CityNames')
-class Unit(GeneralModel):
-    Unit_name=models.CharField(verbose_name='نام واحد',max_length=30)
-    City=models.ForeignKey(City,on_delete=models.CASCADE)
-    def __str__(self):
-        return f'{self.Unit_name} - {self.City.City_name}'
-    class Meta:
-        
-        verbose_name = _('UnitName')
-        verbose_name_plural = _('UnitNames')
-
-class Profile(models.Model):
-    GENDER_MALE = 1
-    GENDER_FEMALE = 2
-    GENDER_CHOICES = [
-        (GENDER_MALE, ("مرد")),
-        (GENDER_FEMALE, ("زن")),
-    ]
-    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    gender = models.PositiveSmallIntegerField(
-        choices=GENDER_CHOICES, null=True, blank=True, verbose_name='جنسیت')
-    age = models.PositiveSmallIntegerField(default=0)
-    bio = models.TextField(null=True, blank=True)
-    def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
-
-class AdminUser(GeneralModel):
-    Admin_User=models.ForeignKey(MyUser,on_delete=models.CASCADE)
-    # Admin_City=models.ForeignKey(City,on_delete=models.CASCADE)
-    Admin_Unit=models.ForeignKey(Unit,on_delete=models.CASCADE)
 
 
 

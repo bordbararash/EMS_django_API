@@ -18,7 +18,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('User_national_code', 'User_mobile','is_active')
+        fields = ('User_national_code', 'User_mobile','is_active','IsOrganizationalAccount')
         extra_kwargs = {
             # 'password': {'write_only': True},
             'User_mobile': {'validators': (clean_email,)}
@@ -26,6 +26,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['is_active']=False
+        
         return User.objects.create_user(**validated_data)
 
     def validate_User_national_code(self, value):
