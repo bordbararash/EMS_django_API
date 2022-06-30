@@ -10,6 +10,7 @@ urlpatterns = [
     path('send_otp/', views.SendOTP.as_view(), name='send_otp'),
     path('city_names/', views.CityView.as_view(), name='city_names'),
     path('unit_names/', views.UnitView.as_view(), name='unit_names'),
+    path('update_info/', views.UserUpdateInfo.as_view(), name='user_update_info'),
     # path('login/', views.UserLoginView.as_view(), name='user_login'),
     # path('logout/', views.UserLogoutView.as_view(), name='user_logout'),
     # path('profile/<int:user_id>/', views.UserProfileView.as_view(), name='user_profile'),

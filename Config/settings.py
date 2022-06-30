@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from telnetlib import AUTHENTICATION
+# from telnetlib import AUTHENTICATION
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'Person.apps.PersonConfig',
     'rest_framework',
     'drf_spectacular',
+    'rest_framework_simplejwt',
     
 ]
 
@@ -137,6 +139,10 @@ AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend','Account.My
 # 
 REST_FRAMEWORK = {
     
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 SPECTACULAR_SETTINGS = {
@@ -145,4 +151,8 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
+}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }

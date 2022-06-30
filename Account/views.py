@@ -1,17 +1,12 @@
-
-
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from yaml import serialize
-
 from Account.models import City, Unit
 from .serializers import CitySerializer, OTPSerializer, UnitSerializer, UserRegisterSerializer, UserSerializer
 from rest_framework import status
 # from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from Utils.otp import get_random_otp
 from django.utils.datastructures import MultiValueDictKeyError
@@ -23,12 +18,12 @@ OTPCODE = ''
 
 
 class UserRegisterView(APIView):
-    serializer_class=UserRegisterSerializer#for swagger-ui
+    serializer_class = UserRegisterSerializer  # for swagger-ui
+
     def post(self, request):
-        
+
         ser_data = UserRegisterSerializer(data=request.POST)
         if ser_data.is_valid():
-            # TODO send Activation Code:1234
             global OTPCODE
             OTPCODE = str(get_random_otp())
             print(f'{OTPCODE} is OTPCODE')
@@ -41,7 +36,8 @@ class UserRegisterView(APIView):
 
 
 class SendOTP(APIView):
-    serializer_class=OTPSerializer#for swagger-ui
+    serializer_class = OTPSerializer  # for swagger-ui
+
     def post(self, request):
         try:
             otp = request.data['otp']
@@ -54,7 +50,7 @@ class SendOTP(APIView):
                 queryset.update(is_active=True)
                 return Response(ser_data.data, status=status.HTTP_200_OK)
             return Response({'message': 'INVALID OTP'}, status=status.HTTP_400_BAD_REQUEST)
-        except ( NameError,):
+        except (NameError,):
             return Response({'message': 'MOBILE NUMBER NOT FOUND'}, status=status.HTTP_400_BAD_REQUEST)
         except(MultiValueDictKeyError,):
             return Response({'message': 'Error oucerd'}, status=status.HTTP_400_BAD_REQUEST)
@@ -62,34 +58,41 @@ class SendOTP(APIView):
 
 class UserUpdateInfo(APIView):
     def post(self, request):
-        
-        usr=request.user
-        ser_data = UserSerializer(instance=request.POST)
-        if ser_data.is_valid():
-            ser_data.update(ser_data.validated_data)
-            return Response(ser_data.data, status=status.HTTP_201_CREATED)
-        return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+        usr = request.user
+        print('*'*90)
+        print(f'usr={usr}')
+        print('*'*90)
+
+        # ser_data = UserSerializer(instance=usr)
+        # if ser_data.is_valid():
+        #     ser_data.update(ser_data.validated_data)
+        #     return Response(ser_data.data, status=status.HTTP_201_CREATED)
+        # return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CityView(APIView):
     '''
     no parameter needed.
     show all city 
     '''
-    serializer_class=CitySerializer#for swagger-ui
-    def get(self,request):
-        City_names=City.objects.all()
-        ser_data=CitySerializer(instance=City_names,many=True)
-        return Response(ser_data.data,status=status.HTTP_200_OK)
+    serializer_class = CitySerializer  # for swagger-ui
+
+    def get(self, request):
+        City_names = City.objects.all()
+        ser_data = CitySerializer(instance=City_names, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
+
+
 class UnitView(APIView):
 
     '''
     user should send city as int 
     '''
-    serializer_class=UnitSerializer#for swagger-ui
-    def post(self,request):
-        city=request.data['city']
-        
-        Unit_names=Unit.objects.filter(City=city)
-        ser_data=UnitSerializer(instance=Unit_names,many=True)
-        return Response(ser_data.data,status=status.HTTP_200_OK)
+    serializer_class = UnitSerializer  # for swagger-ui
 
+    def post(self, request):
+        city = request.data['city']
+
+        Unit_names = Unit.objects.filter(City=city)
+        ser_data = UnitSerializer(instance=Unit_names, many=True)
+        return Response(ser_data.data, status=status.HTTP_200_OK)
