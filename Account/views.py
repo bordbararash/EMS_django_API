@@ -3,7 +3,10 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import OTPSerializer, UserRegisterSerializer, UserSerializer
+from yaml import serialize
+
+from Account.models import City, Unit
+from .serializers import CitySerializer, OTPSerializer, UnitSerializer, UserRegisterSerializer, UserSerializer
 from rest_framework import status
 # from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -20,6 +23,7 @@ OTPCODE = ''
 
 
 class UserRegisterView(APIView):
+    serializer_class=UserRegisterSerializer#for swagger-ui
     def post(self, request):
         
         ser_data = UserRegisterSerializer(data=request.POST)
@@ -37,6 +41,7 @@ class UserRegisterView(APIView):
 
 
 class SendOTP(APIView):
+    serializer_class=OTPSerializer#for swagger-ui
     def post(self, request):
         try:
             otp = request.data['otp']
@@ -64,4 +69,27 @@ class UserUpdateInfo(APIView):
             ser_data.update(ser_data.validated_data)
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CityView(APIView):
+    '''
+    no parameter needed.
+    show all city 
+    '''
+    serializer_class=CitySerializer#for swagger-ui
+    def get(self,request):
+        City_names=City.objects.all()
+        ser_data=CitySerializer(instance=City_names,many=True)
+        return Response(ser_data.data,status=status.HTTP_200_OK)
+class UnitView(APIView):
+
+    '''
+    user should send city as int 
+    '''
+    serializer_class=UnitSerializer#for swagger-ui
+    def post(self,request):
+        city=request.data['city']
         
+        Unit_names=Unit.objects.filter(City=city)
+        ser_data=UnitSerializer(instance=Unit_names,many=True)
+        return Response(ser_data.data,status=status.HTTP_200_OK)
+

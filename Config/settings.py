@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Account.apps.AccountConfig',
     'Person.apps.PersonConfig',
     'rest_framework',
+    'drf_spectacular',
     
 ]
 
@@ -134,3 +135,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "Account.MyUser"
 AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend','Account.MyBackend.MobileBackend']
 # 
+REST_FRAMEWORK = {
+    
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EMS API',
+    'DESCRIPTION': 'API for mobile app',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}

@@ -1,10 +1,11 @@
 
 
+from dataclasses import field, fields
 from rest_framework import serializers
 
 from django.contrib.auth import get_user_model
 
-from .models import ActivationCode
+from .models import ActivationCode,City,Unit
 
 User = get_user_model()
 
@@ -66,3 +67,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class OTPSerializer(serializers.Serializer):
     otp = serializers.CharField()
+
+class UnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Unit
+        fields=('id','Unit_name','City')
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model=City
+        fields=('id','City_name')
+        

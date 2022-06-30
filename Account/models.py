@@ -51,7 +51,7 @@ class MyUser(AbstractUser):
     def __str__(self):
         
         # return self.first_name + " " + self.last_name
-        return self.User_national_code
+        return self.User_mobile
 
 
 
